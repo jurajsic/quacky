@@ -61,12 +61,15 @@ def expr(key, val, op = '=', dtype = 'String', literal = False, smt_lib = False)
         # Add quotation marks if expression involves a string
         if dtype == 'String':
             smt += '"'
-
-        smt += str(val)
-
-        if dtype == 'String':
+            for ch in val:
+                if ord(ch) < 32 or ord(ch) > 126:
+                    smt += f"\\u{{{ord(ch):x}}}"
+                else:
+                    smt += ch
             smt += '"'
-        
+        else:
+            smt += str(val)
+
         smt += ')'
 
     return smt
