@@ -17,16 +17,16 @@ scope_format = scope_format.replace('\n', '')
 # GCP scope format (SMT-LIB)
 scope_smt_lib_format = '''
 (re.++
-(str.to.re "/")
-(re.+ (re.union (re.range "A" "Z") (re.range "a" "z") (re.range "0" "9") (str.to.re "_") (str.to.re "+") (str.to.re "=") (str.to.re ",") (str.to.re ".") (str.to.re "@") (str.to.re "-")))
-(str.to.re "/")
-(re.+ (re.union (re.range "A" "Z") (re.range "a" "z") (re.range "0" "9") (str.to.re "_") (str.to.re "+") (str.to.re "=") (str.to.re ",") (str.to.re ".") (str.to.re "@") (str.to.re "-")))
-(str.to.re "/")
-(re.+ (re.union (re.range "A" "Z") (re.range "a" "z") (re.range "0" "9") (str.to.re "_") (str.to.re "+") (str.to.re "=") (str.to.re ",") (str.to.re ".") (str.to.re "@") (str.to.re "-")))
-(str.to.re "/")
-(str.to.re "{}")
-(str.to.re "/")
-(re.+ (re.union (re.range "A" "Z") (re.range "a" "z") (re.range "0" "9") (str.to.re "_") (str.to.re "+") (str.to.re "=") (str.to.re ",") (str.to.re ".") (str.to.re "@") (str.to.re "-"))))
+(str.to_re "/")
+(re.+ (re.union (re.range "A" "Z") (re.range "a" "z") (re.range "0" "9") (str.to_re "_") (str.to_re "+") (str.to_re "=") (str.to_re ",") (str.to_re ".") (str.to_re "@") (str.to_re "-")))
+(str.to_re "/")
+(re.+ (re.union (re.range "A" "Z") (re.range "a" "z") (re.range "0" "9") (str.to_re "_") (str.to_re "+") (str.to_re "=") (str.to_re ",") (str.to_re ".") (str.to_re "@") (str.to_re "-")))
+(str.to_re "/")
+(re.+ (re.union (re.range "A" "Z") (re.range "a" "z") (re.range "0" "9") (str.to_re "_") (str.to_re "+") (str.to_re "=") (str.to_re ",") (str.to_re ".") (str.to_re "@") (str.to_re "-")))
+(str.to_re "/")
+(str.to_re "{}")
+(str.to_re "/")
+(re.+ (re.union (re.range "A" "Z") (re.range "a" "z") (re.range "0" "9") (str.to_re "_") (str.to_re "+") (str.to_re "=") (str.to_re ",") (str.to_re ".") (str.to_re "@") (str.to_re "-"))))
 '''
 scope_smt_lib_format = ' '.join(scope_smt_lib_format.split('\n'))
 scope_smt_lib_format = scope_smt_lib_format.lstrip()
@@ -94,7 +94,7 @@ def gcp_type_constraints(actions, smt_lib = False, enc = False):
 
         if smt_lib:
             smt += '(assert (and (>= (str.to_int action) {}) (<= (str.to_int action) {})))\n'.format(int(lo), int(hi))
-            smt += '(assert (str.in.re action ((_ re.loop 3 3) (re.range "0" "9"))))\n'
+            smt += '(assert (str.in_re action ((_ re.loop 3 3) (re.range "0" "9"))))\n'
         else:
             smt += '(assert (and (>= action "{}") (<= action "{}")))\n'.format(lo, hi)
             smt += '(assert (in action /[0-9]{3,3}/))\n'
@@ -109,7 +109,7 @@ def gcp_type_constraints(actions, smt_lib = False, enc = False):
         if smt_lib:
             scope = scope_smt_lib_format.format(resource_type)
             
-            smt += ' (str.in.re resource {})'.format(scope)
+            smt += ' (str.in_re resource {})'.format(scope)
         
         else:
             scope = scope_format.format(resource_type)

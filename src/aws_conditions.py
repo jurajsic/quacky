@@ -44,7 +44,7 @@ def string_equals_ignore_case(key, values, for_all, smt_lib):
             obj += '({}|{})'.format(i.upper(), i.lower())
 
         if smt_lib:
-            body += ' (str.in.re {} {})'.format(key, re2smt(obj))
+            body += ' (str.in_re {} {})'.format(key, re2smt(obj))
         else:
             body += ' (in {} /{}/)'.format(key, obj)
     
@@ -209,7 +209,7 @@ def ip_address(key, values, for_all, smt_lib):
         obj += '.*'
         
         if smt_lib:
-            body += ' (str.in.re {} {})'.format(key, re2smt(obj))
+            body += ' (str.in_re {} {})'.format(key, re2smt(obj))
         else:
             body += ' (in {} /{}/)'.format(key, obj)
 
@@ -325,7 +325,7 @@ class AWSCondition:
                 obj = '[01]{128,128}'
 
             if self.smt_lib:
-                assertions.add('(assert (str.in.re {} {}))\n'.format(self.key, re2smt(obj)))
+                assertions.add('(assert (str.in_re {} {}))\n'.format(self.key, re2smt(obj)))
             else:
                 assertions.add('(assert (in {} /{}/))\n'.format(self.key, obj))
         

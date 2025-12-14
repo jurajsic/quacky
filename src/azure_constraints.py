@@ -21,24 +21,24 @@ scope_format = scope_format.replace('\n', '')
 # Azure scope format (SMT-LIB)
 scope_smt_lib_format = '''
 (re.++
-(str.to.re "/subscriptions/")
+(str.to_re "/subscriptions/")
 ((_ re.loop 8 8) (re.union (re.range "0" "9") (re.range "a" "f")))
-(str.to.re "-")
+(str.to_re "-")
 ((_ re.loop 4 4) (re.union (re.range "0" "9") (re.range "a" "f")))
-(str.to.re "-")
+(str.to_re "-")
 ((_ re.loop 4 4) (re.union (re.range "0" "9") (re.range "a" "f")))
-(str.to.re "-")
+(str.to_re "-")
 ((_ re.loop 4 4) (re.union (re.range "0" "9") (re.range "a" "f")))
-(str.to.re "-")
+(str.to_re "-")
 ((_ re.loop 12 12) (re.union (re.range "0" "9") (re.range "a" "f")))
-(str.to.re "/resourcegroups/")
-(re.+ (re.union (re.range "A" "Z") (re.range "a" "z") (re.range "0" "9") (str.to.re "_") (str.to.re "+") (str.to.re "=") (str.to.re ",") (str.to.re ".") (str.to.re "@") (str.to.re "-")))
-(str.to.re "/providers/")
-(str.to.re "{}") 
-(str.to.re "/")
-(str.to.re "{}")
-(str.to.re "/")
-(re.+ (re.union (re.range "A" "Z") (re.range "a" "z") (re.range "0" "9") (str.to.re "_") (str.to.re "+") (str.to.re "=") (str.to.re ",") (str.to.re ".") (str.to.re "@") (str.to.re "-"))))
+(str.to_re "/resourcegroups/")
+(re.+ (re.union (re.range "A" "Z") (re.range "a" "z") (re.range "0" "9") (str.to_re "_") (str.to_re "+") (str.to_re "=") (str.to_re ",") (str.to_re ".") (str.to_re "@") (str.to_re "-")))
+(str.to_re "/providers/")
+(str.to_re "{}") 
+(str.to_re "/")
+(str.to_re "{}")
+(str.to_re "/")
+(re.+ (re.union (re.range "A" "Z") (re.range "a" "z") (re.range "0" "9") (str.to_re "_") (str.to_re "+") (str.to_re "=") (str.to_re ",") (str.to_re ".") (str.to_re "@") (str.to_re "-"))))
 '''
 scope_smt_lib_format = ' '.join(scope_smt_lib_format.split('\n'))
 scope_smt_lib_format = scope_smt_lib_format.lstrip()
@@ -127,7 +127,7 @@ def azure_type_constraints(actions, smt_lib = False, enc = False):
 
         if smt_lib:
             smt += '(assert (and (>= (str.to_int action) {}) (<= (str.to_int action) {})))\n'.format(int(lo), int(hi))
-            smt += '(assert (str.in.re action ((_ re.loop 5 5) (re.range "0" "9"))))\n'
+            smt += '(assert (str.in_re action ((_ re.loop 5 5) (re.range "0" "9"))))\n'
         else:
             smt += '(assert (and (>= action "{}") (<= action "{}")))\n'.format(lo, hi)
             smt += '(assert (in action /[0-9]{5,5}/))\n'
@@ -144,7 +144,7 @@ def azure_type_constraints(actions, smt_lib = False, enc = False):
                 scope = scope_smt_lib_format.format(provider, resource_type)
                 scope = scope.replace('//', '/')
                 
-                smt += ' (str.in.re resource {})'.format(scope)
+                smt += ' (str.in_re resource {})'.format(scope)
             
             else:
                 scope = scope_format.format(provider.replace('.', '\.'), resource_type.replace('.', '\.'))
@@ -185,7 +185,7 @@ def azure_type_constraints(actions, smt_lib = False, enc = False):
                 scope = scope_smt_lib_format.format(provider, resource_type)
                 scope = scope.replace('//', '/')
                 
-                smt += ' (str.in.re resource (re.++ {} (str.to.re "/") (re.* re.allchar)))'.format(scope)
+                smt += ' (str.in_re resource (re.++ {} (str.to_re "/") (re.* re.allchar)))'.format(scope)
             
             else:
                 scope = scope_format.format(provider.replace('.', '\.'), resource_type.replace('.', '\.'))

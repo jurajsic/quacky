@@ -51,7 +51,7 @@ def expr(key, val, op = '=', dtype = 'String', literal = False, smt_lib = False)
     # Create a regular expression instead
     if dtype == 'String' and ('*' in val or '?' in val) and not literal:
         if smt_lib:
-            smt += '(str.in.re {} {})'.format(key, regexpr(val, True))
+            smt += '(str.in_re {} {})'.format(key, regexpr(val, True))
         else:
             smt += '(in {} /{}/)'.format(key, regexpr(val, False))
     

@@ -49,8 +49,8 @@ class CELInterpreter(lark.visitors.Interpreter):
                 
                 for match in matches:
                     if self.smt_lib:
-                        scope = '(re.++ (re.* re.allchar) (str.to.re "/") (str.to.re "{}") (str.to.re "/") (re.* re.allchar))'.format(match)
-                        expr = 'str.in.re resource ' + scope
+                        scope = '(re.++ (re.* re.allchar) (str.to_re "/") (str.to_re "{}") (str.to_re "/") (re.* re.allchar))'.format(match)
+                        expr = 'str.in_re resource ' + scope
 
                     else:
                         scope = '.*/{}/.*'.format(match)

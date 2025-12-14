@@ -19,23 +19,23 @@ class PCREInterpreter(lark.visitors.Interpreter):
         return self.smt.strip()
 
     def metacharacters(self, tree):
-        self.smt += ' (str.to.re "'
+        self.smt += ' (str.to_re "'
         self.smt += tree.children[0].value
         self.smt += '")'
 
     def square_metacharacters(self, tree):
-        self.smt += ' (str.to.re "'
+        self.smt += ' (str.to_re "'
         self.smt += tree.children[0].value
         self.smt += '")'
     
     def char_types(self, tree):
-        self.smt += ' (str.to.re "'
+        self.smt += ' (str.to_re "'
         self.smt += tree.children[1].value
         self.smt += '")'
 
     def escaped_square_simple_value(self, tree):
         if not self.in_range:
-            self.smt += ' (str.to.re "'
+            self.smt += ' (str.to_re "'
         
         self.smt += tree.children[1]
 
@@ -47,7 +47,7 @@ class PCREInterpreter(lark.visitors.Interpreter):
 
     def square_base_value(self, tree):
         if not self.in_range:
-            self.smt += ' (str.to.re "'
+            self.smt += ' (str.to_re "'
 
         self.smt += tree.children[0]
 
@@ -82,7 +82,7 @@ class PCREInterpreter(lark.visitors.Interpreter):
             self.smt += ')'
 
     def escaped_simple_value(self, tree):
-        self.smt += ' (str.to.re "'
+        self.smt += ' (str.to_re "'
         self.smt += tree.children[1]
         self.smt += '")'
 
@@ -90,7 +90,7 @@ class PCREInterpreter(lark.visitors.Interpreter):
         self.visit_children(tree)
         
     def base_value(self, tree):
-        self.smt += ' (str.to.re "'
+        self.smt += ' (str.to_re "'
         self.smt += tree.children[0]
         self.smt += '")'
 

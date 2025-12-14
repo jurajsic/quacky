@@ -34,35 +34,35 @@ for namespace in actions_json.keys():
                     resource_parts = resource.split(':')
                     
                     # substitute in regex representations of ${...}
-                    resource_parts[1] = resource_parts[1].replace('${Partition}', '(str.to.re "aws")')
-                    resource_parts[3] = resource_parts[3].replace('${Region}', '(re.++ (re.union (re.++ (str.to.re "us") (re.opt (str.to.re "-gov"))) (str.to.re "ap") (str.to.re "ca") (str.to.re "cn") (str.to.re "eu") (str.to.re "sa")) (str.to.re "-") (re.union (str.to.re "central") (re.++ (re.opt (re.union (str.to.re "north") (str.to.re "south"))) (re.opt (re.union (str.to.re "east") (str.to.re "west"))))) (str.to.re "-") (re.range "0" "9") (re.opt (re.range "a" "z")))')
+                    resource_parts[1] = resource_parts[1].replace('${Partition}', '(str.to_re "aws")')
+                    resource_parts[3] = resource_parts[3].replace('${Region}', '(re.++ (re.union (re.++ (str.to_re "us") (re.opt (str.to_re "-gov"))) (str.to_re "ap") (str.to_re "ca") (str.to_re "cn") (str.to_re "eu") (str.to_re "sa")) (str.to_re "-") (re.union (str.to_re "central") (re.++ (re.opt (re.union (str.to_re "north") (str.to_re "south"))) (re.opt (re.union (str.to_re "east") (str.to_re "west"))))) (str.to_re "-") (re.range "0" "9") (re.opt (re.range "a" "z")))')
                     resource_parts[4] = resource_parts[4].replace('${Account}', '((_ re.loop 12 12) (re.range "0" "9"))')
                     
-                    smt += ' (str.in.re resource'
+                    smt += ' (str.in_re resource'
                     smt += ' (re.++'
-                    smt += ' (str.to.re "arn:aws:")'
-                    smt += ' (str.to.re "' + namespace + ':")'
+                    smt += ' (str.to_re "arn:aws:")'
+                    smt += ' (str.to_re "' + namespace + ':")'
                     
                     if not resource_parts[3] == '':
                         smt += ' ' + resource_parts[3]
                     
-                    smt += ' (str.to.re ":")'
+                    smt += ' (str.to_re ":")'
                     
                     if not resource_parts[4] == '':
                         smt += ' ' + resource_parts[4]
                     
-                    smt += ' (str.to.re ":")'
+                    smt += ' (str.to_re ":")'
                     
                     if (not resource_parts[5] == '') and (not resource_parts[5] == "\*"):
                         smt += ' (re.++ ' + resource_parts[5] + ')'
                     else:
-                        smt += ' (str.to.re "*")'
+                        smt += ' (str.to_re "*")'
                     
                     smt += '))'
                 
                 # if no generic ARN in arg_regex.json, use the regex below
                 else:
-                    smt += ' (str.in.re resource (re.++ (re.opt (re.++ (str.to.re "arn:aws:") (str.to.re "' + namespace + '") (str.to.re ":") (re.opt (re.++ (re.union (re.++ (str.to.re "us") (re.opt (str.to.re "-gov"))) (str.to.re "ap") (str.to.re "ca") (str.to.re "cn") (str.to.re "eu") (str.to.re "sa")) (str.to.re "-") (re.union (str.to.re "central") (re.++ (re.opt (re.union (str.to.re "north") (str.to.re "south"))) (re.opt (re.union (str.to.re "east") (str.to.re "west"))))) (str.to.re "-") (re.range "0" "9") (re.opt (re.range "a" "z")))) (str.to.re ":") (re.opt ((_ re.loop 12 12) (re.range "0" "9"))) (str.to.re ":"))) (str.to.re "*")))'
+                    smt += ' (str.in_re resource (re.++ (re.opt (re.++ (str.to_re "arn:aws:") (str.to_re "' + namespace + '") (str.to_re ":") (re.opt (re.++ (re.union (re.++ (str.to_re "us") (re.opt (str.to_re "-gov"))) (str.to_re "ap") (str.to_re "ca") (str.to_re "cn") (str.to_re "eu") (str.to_re "sa")) (str.to_re "-") (re.union (str.to_re "central") (re.++ (re.opt (re.union (str.to_re "north") (str.to_re "south"))) (re.opt (re.union (str.to_re "east") (str.to_re "west"))))) (str.to_re "-") (re.range "0" "9") (re.opt (re.range "a" "z")))) (str.to_re ":") (re.opt ((_ re.loop 12 12) (re.range "0" "9"))) (str.to_re ":"))) (str.to_re "*")))'
             
             # if resource type specified
             else:
@@ -75,13 +75,13 @@ for namespace in actions_json.keys():
                     
                     for j in range(len(resourceResource)):
                         if (not ('$' in resourceResource[j])) and (not ('re.' in resourceResource[j])) and (not ('.re' in resourceResource[j])) and (not ('str' in resourceResource[j])):
-                            resourceResource[j] = '(str.to.re "'+ resourceResource[j] + '")'   
+                            resourceResource[j] = '(str.to_re "'+ resourceResource[j] + '")'   
                     
                     if len(resourceResource) >0 :
                         temp = resourceResource[0]
                         
                         for k in range(1, len(resourceResource)):
-                            temp = temp + ' (str.to.re "/")' + resourceResource[k] 
+                            temp = temp + ' (str.to_re "/")' + resourceResource[k] 
                             flag = 1
                         
                         resource_parts[i] = temp
@@ -92,26 +92,26 @@ for namespace in actions_json.keys():
                 
                 for i in range(1, len(resource_parts)):
                     if i == 3: #replace ${Region}
-                        resource_parts[i] = re.sub('\$\{.+\}', '(re.++ (re.union (re.++ (str.to.re "us") (re.opt (str.to.re "-gov"))) (str.to.re "ap") (str.to.re "ca") (str.to.re "cn") (str.to.re "eu") (str.to.re "sa")) (str.to.re "-") (re.union (str.to.re "central") (re.++ (re.opt (re.union (str.to.re "north") (str.to.re "south"))) (re.opt (re.union (str.to.re "east") (str.to.re "west"))))) (str.to.re "-") (re.range "0" "9") (re.opt (re.range "a" "z")))', resource_parts[i], flags = re.DOTALL)
+                        resource_parts[i] = re.sub('\$\{.+\}', '(re.++ (re.union (re.++ (str.to_re "us") (re.opt (str.to_re "-gov"))) (str.to_re "ap") (str.to_re "ca") (str.to_re "cn") (str.to_re "eu") (str.to_re "sa")) (str.to_re "-") (re.union (str.to_re "central") (re.++ (re.opt (re.union (str.to_re "north") (str.to_re "south"))) (re.opt (re.union (str.to_re "east") (str.to_re "west"))))) (str.to_re "-") (re.range "0" "9") (re.opt (re.range "a" "z")))', resource_parts[i], flags = re.DOTALL)
                     if i == 4: # replace ${AccountID}
                         resource_parts[i] = re.sub('\$\{.+\}', '((_ re.loop 12 12) (re.range "0" "9"))', resource_parts[i], flags = re.DOTALL)
                     if i == 5: # replace the last part of the ARN if a regex has not been defined for the resource resource_type yet.
-                        resource_parts[i] = re.sub('\$\{.+\}', '(re.* (re.union (re.range "A" "Z") (re.range "a" "z") (re.range "0" "9") (str.to.re "_") (str.to.re "+") (str.to.re "=") (str.to.re ",") (str.to.re ".") (str.to.re "@") (str.to.re "\") (str.to.re "-")))', resource_parts[i], flags = re.DOTALL)
+                        resource_parts[i] = re.sub('\$\{.+\}', '(re.* (re.union (re.range "A" "Z") (re.range "a" "z") (re.range "0" "9") (str.to_re "_") (str.to_re "+") (str.to_re "=") (str.to_re ",") (str.to_re ".") (str.to_re "@") (str.to_re "\") (str.to_re "-")))', resource_parts[i], flags = re.DOTALL)
                 
-                smt += ' (str.in.re resource'
+                smt += ' (str.in_re resource'
                 smt += ' (re.++'
-                smt += ' (str.to.re "arn:aws:")'
-                smt += ' (str.to.re "' + namespace + ':")'
+                smt += ' (str.to_re "arn:aws:")'
+                smt += ' (str.to_re "' + namespace + ':")'
                 
                 if not resource_parts[3] == '':
                     smt += ' ' + resource_parts[3]
                 
-                smt += ' (str.to.re ":")'
+                smt += ' (str.to_re ":")'
                 
                 if not resource_parts[4] == '':
                     smt += ' ' + resource_parts[4]
                 
-                smt += ' (str.to.re ":")'
+                smt += ' (str.to_re ":")'
                 
                 if (not resource_parts[5] == '') and (not resource_parts[5] == '\*'):
                     if flag == 1:
@@ -119,7 +119,7 @@ for namespace in actions_json.keys():
                     else:
                         smt += ' ' + resource_parts[5]
                 else:
-                    smt += ' (str.to.re "*")'
+                    smt += ' (str.to_re "*")'
                 
                 smt += '))' 
             

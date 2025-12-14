@@ -36,7 +36,7 @@ def aws_type_constraints(namespaces, smt_lib = False, enc = False):
         if smt_lib:
             smt_json = json.loads(open('offline/aws/constraints_enc_z3.json', 'r').read())
             smt += '(assert (and (>= (str.to_int action) {}) (<= (str.to_int action) {})))\n'.format(int(lo), int(hi))
-            smt += '(assert (str.in.re action ((_ re.loop 5 5) (re.range "0" "9"))))\n'
+            smt += '(assert (str.in_re action ((_ re.loop 5 5) (re.range "0" "9"))))\n'
         else:
             smt_json = json.loads(open('offline/aws/constraints_enc.json', 'r').read())
             smt += '(assert (and (>= action "{}") (<= action "{}")))\n'.format(lo, hi)

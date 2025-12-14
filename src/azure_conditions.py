@@ -36,7 +36,7 @@ def expr(attr, value, op, smt_lib):
         smt += '='
     elif 'Like' in op:
         if smt_lib:
-            smt += 'str.in.re'
+            smt += 'str.in_re'
         else:
             smt += 'in'
 
