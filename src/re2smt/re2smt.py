@@ -2,13 +2,14 @@
 
 from cachetools import cached
 from lark import *
+import lark
 import re
 
 grammar = open('re2smt/pcre.lark', 'r').read()
 pcre_parser = Lark(grammar)
 
 # Visitor for PCRE regex grammar
-class PCREInterpreter(visitors.Interpreter):
+class PCREInterpreter(lark.visitors.Interpreter):
     def __init__(self, tree):
         self.smt = ''
         self.in_range = False
