@@ -114,7 +114,7 @@ class PCREInterpreter(lark.visitors.Interpreter):
         self.smt += ')'
 
     def complement_pattern(self, tree):
-        self.smt += ' (re.complement'
+        self.smt += ' (re.comp'
         self.visit_children(tree)
         self.smt += ')'
 
